@@ -19,38 +19,44 @@ func main() {
 		library.NewBook("Name 1", "Title 1", "Contents 1"),
 		library.NewBook("Name Two", secondTitle, "Contents Two"),
 		library.NewBook("Name Three", "Title Three", "Contents Three"),
+		library.NewBook("Name 4", "Title 4", "Contents 4"),
+		library.NewBook("Name 5", "Title 5", "Contents 5"),
 	}
-	var bookLibrary library.BookLibrary = library.NewLibrary()
-	var err error
 
+	var bookLibraryOnMap library.BookLibrary = library.NewLibraryOnMap()
+	fmt.Println("testing library with map storage")
+	testLibrary(bookLibraryOnMap, books)
+
+	var bookLibraryOnSlice library.BookLibrary = library.NewLibraryOnSlice()
+	fmt.Println("testing library with slice storage")
+	testLibrary(bookLibraryOnSlice, books)
+
+	fmt.Println("Program finished! Test run passed")
+}
+
+func testLibrary(bookLibrary library.BookLibrary, books []*library.Book) {
+	var err error
 	for _, book := range books {
 		err = bookLibrary.Append(book)
 		Assert(err == nil, "library failed to append a book titled: "+book.Title)
 	}
 
-	foundBook, hasFound := bookLibrary.Search(secondTitle)
-	Assert(hasFound == true, "The book with the name is not found: "+secondTitle)
-	Assert(foundBook.Title == secondTitle, "The found book has wrong title")
-	Assert(foundBook.Author == "Name Two", "The found book has wrong author")
+	for i := 1; i <= 3; i++ {
+		title := books[i].Title
+		foundBook, hasFound := bookLibrary.Search(title)
+		Assert(hasFound == true, "The book with the name is not found: "+title)
+		Assert(foundBook.Title == title, "The found book has wrong title")
+		Assert(foundBook.Author == "Name Two", "The found book has wrong author")
+
+	}
 
 	newHasher := func(title string) int {
 		// a real bad example
 		return len(title)
 	}
 	bookLibrary.SetHasher(newHasher)
-	_, hasFound = bookLibrary.Search(secondTitle)
+
+	secondTitle := books[1].Title
+	_, hasFound := bookLibrary.Search(secondTitle)
 	Assert(hasFound == false, "The book after changed hasher is found: "+secondTitle)
-
-	bookLibrary.SetBookStore(library.NewBookStore())
-	for _, book := range books {
-		err = bookLibrary.Append(book)
-		Assert(err == nil, "library failed to append a book titled: "+book.Title)
-	}
-
-	foundBook, hasFound = bookLibrary.Search(secondTitle)
-	Assert(hasFound == true, "After changed store the book with the name is not found: "+secondTitle)
-	Assert(foundBook.Title == secondTitle, "After changed store the found book has wrong title")
-	Assert(foundBook.Author == "Name Two", "After changed store the found book has wrong author")
-
-	fmt.Println("Program finished! Test run passed")
 }

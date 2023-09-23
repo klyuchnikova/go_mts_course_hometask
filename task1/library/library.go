@@ -20,14 +20,26 @@ type booklibrary struct {
 	hasher    BookHasher
 }
 
-func NewLibrary() BookLibrary {
+func NewLibraryOnMap() BookLibrary {
 	defaultHasher := func(title string) int {
 		h := fnv.New32a()
 		h.Write([]byte(title))
 		return int(h.Sum32())
 	}
 	return &booklibrary{
-		bookStore: NewBookStore(),
+		bookStore: NewBookStoreOnMap(),
+		hasher:    defaultHasher,
+	}
+}
+
+func NewLibraryOnSlice() BookLibrary {
+	bookCound := 0
+	defaultHasher := func(title string) int {
+		defer func() { bookCound += 1 }()
+		return bookCound
+	}
+	return &booklibrary{
+		bookStore: NewBookStoreOnSlice(),
 		hasher:    defaultHasher,
 	}
 }
