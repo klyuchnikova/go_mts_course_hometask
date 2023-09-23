@@ -1,1 +1,4 @@
-# go_mts_course_hometask
+# Hometask for course Разработка микросервисов на Go
+Ключникова Ульяна БПМИ 212 (группа по курсу 2)
+
+1. task_1
