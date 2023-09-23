@@ -19,8 +19,8 @@ func main() {
 		library.NewBook("Name 1", "Title 1", "Contents 1"),
 		library.NewBook("Name Two", secondTitle, "Contents Two"),
 		library.NewBook("Name Three", "Title Three", "Contents Three"),
-		library.NewBook("Name 4", "Title 4", "Contents 4"),
-		library.NewBook("Name 5", "Title 5", "Contents 5"),
+		library.NewBook("Name 4", "Title four 4", "Contents 4"),
+		library.NewBook("Name 5", "Title five   5", "Contents 5"),
 	}
 
 	var bookLibraryOnMap library.BookLibrary = library.NewLibraryOnMap()
@@ -45,14 +45,14 @@ func testLibrary(bookLibrary library.BookLibrary, books []*library.Book) {
 		title := books[i].Title
 		foundBook, hasFound := bookLibrary.Search(title)
 		Assert(hasFound == true, "The book with the name is not found: "+title)
-		Assert(foundBook.Title == title, "The found book has wrong title")
-		Assert(foundBook.Author == "Name Two", "The found book has wrong author")
+		Assert(foundBook.Title == title, "The found book has wrong title: "+foundBook.Title+" != "+title)
+		Assert(foundBook.Author == books[i].Author, "The found book has wrong author")
 
 	}
 
 	newHasher := func(title string) int {
 		// a real bad example
-		return len(title)
+		return len(title) + 100
 	}
 	bookLibrary.SetHasher(newHasher)
 

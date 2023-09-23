@@ -33,10 +33,8 @@ func NewLibraryOnMap() BookLibrary {
 }
 
 func NewLibraryOnSlice() BookLibrary {
-	bookCound := 0
 	defaultHasher := func(title string) int {
-		defer func() { bookCound += 1 }()
-		return bookCound
+		return len(title)
 	}
 	return &booklibrary{
 		bookStore: NewBookStoreOnSlice(),

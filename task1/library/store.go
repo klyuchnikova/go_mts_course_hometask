@@ -34,11 +34,11 @@ func NewBookStoreOnSlice() BookStore {
 }
 
 func (s *storeOnSlice) Append(id int, book *Book) error {
-	if len(s.books) < id {
+	if id < len(s.books) {
 		s.books[id] = book
 	} else {
-		new_books := make([]*Book, id+1)
-		for i := 0; i <= len(s.books); i++ {
+		new_books := make([]*Book, max(len(s.books)*2, id+1))
+		for i := 0; i < len(s.books); i++ {
 			new_books[i] = s.books[i]
 		}
 		new_books[id] = book
